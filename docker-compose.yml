@@ -1,0 +1,11 @@
+services:
+  frontend:
+    build: .
+    environment:
+      - REACT_APP_API_BASE_URL=https://bis.proxy.mrkvon.org/https://dev.bis.brontosaurus.cz/api/
+      - REACT_APP_CORS_PROXY=https://bis.proxy.mrkvon.org/
+    volumes:
+      - .:/app
+    ports:
+      - 3000:3000
+    command: docker-entrypoint.sh dev
