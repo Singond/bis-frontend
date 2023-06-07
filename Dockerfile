@@ -1,4 +1,4 @@
-FROM ubuntu:20.04
+FROM ubuntu:20.04 AS base
 
 RUN mkdir app
 WORKDIR /app
@@ -21,4 +21,13 @@ EXPOSE 3000
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
+COPY package.json yarn.lock ./
+RUN yarn install
+COPY .eslintignore .eslintrc.yml .prettierrc.yml tsconfig.json ./
+
+
+FROM base AS prod
+COPY public/ public/
+COPY src/ src/
+RUN yarn build
 CMD ["docker-entrypoint.sh"]
